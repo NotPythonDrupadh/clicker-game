@@ -38,11 +38,11 @@ function updateDisplay() {
   document.getElementById('clicks').textContent = clicks;
   document.getElementById('autoClickers').textContent = autoClickers.length;
   document.getElementById('autoClickerCost').textContent = autoClickerCost;
-  document.getElementById('cps').textContent = getClickRate()};
+  document.getElementById('cps').textContent = getClickRate();
   document.getElementById('goldClicks').textContent = 'Gold Clicks: ' + goldClicks;
   updateAchievements();
   document.getElementById('upgradeProgress').style.width = `${(upgradeProgress / upgradeGoal) * 100}%`;
-
+}
 
 // Show fancy messages
 function showFloatingMessage(message) {
