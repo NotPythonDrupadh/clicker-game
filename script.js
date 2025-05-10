@@ -13,6 +13,7 @@ let autoClickerPower = 2; // Start at 2 clicks/sec per auto-clicker
 let soundsEnabled = true;
 let lastUpdateTime = Date.now();
 let totalClicksPerSecond = 0;
+let manualCPS = 1;  // Assume player clicks at 1 CPS by default
 
 // Save/load progress
 if(localStorage.getItem('clicks')) {
@@ -40,7 +41,7 @@ function updateDisplay() {
   document.getElementById('clicks').textContent = clicks;
   document.getElementById('autoClickers').textContent = autoClickers.length;
   document.getElementById('autoClickerCost').textContent = autoClickerCost;
-  document.getElementById('cps').textContent = getClickRate();
+  document.getElementById('cps').textContent = getCPS();
   document.getElementById('goldClicks').textContent = 'Gold Clicks: ' + goldClicks;
   updateAchievements();
   document.getElementById('upgradeProgress').style.width = `${(upgradeProgress / upgradeGoal) * 100}%`;
@@ -84,7 +85,7 @@ function buyAutoClicker() {
       showFloatingMessage("Not enough clicks!");
     }
 }
-  
+
 function buyClickBoost() {
   if (clicks >= 100) {
     clicks -= 100;
@@ -105,8 +106,10 @@ function buyAutoClickerBoost() {
   }
 }
 
-function getClickRate() {
-    return autoClickers.reduce((sum, power) => sum + power * autoClickerBoost, 0) + clickQueue;
+// Get the total CPS (manual clicks + auto-clicker contributions)
+function getCPS() {
+    const autoCPS = autoClickers.reduce((sum, power) => sum + power * autoClickerBoost, 0);
+    return autoCPS + manualCPS;  // Add manual CPS (1, 2, 4, etc. from player clicking)
 }
 
 function updateAchievements() {
@@ -147,20 +150,18 @@ setInterval(() => {
   }
 }, 5000);
 
-// Auto-clicker
+// Auto-clicker logic - periodically add clicks from auto-clickers
 setInterval(() => {
-  clickQueue += getClickRate();
+  clickQueue += getCPS();  // Accumulate clicks based on the total CPS
 }, 1000);
 
-// Update CPS every second
+// Periodically update the display and process click queue
 setInterval(() => {
-  const currentTime = Date.now();
-  const timeElapsed = (currentTime - lastUpdateTime) / 1000; // Time in seconds
-  totalClicksPerSecond = clickQueue / timeElapsed;
-  lastUpdateTime = currentTime;
-
-  updateDisplay();
-  clickQueue = 0;  // Reset click queue after updating CPS
+  if (clickQueue > 0) {
+    clicks += Math.floor(clickQueue);  // Add clicks to the total based on CPS
+    clickQueue = 0;  // Reset the click queue
+    updateDisplay();
+  }
 }, 1000);
 
 updateDisplay();
