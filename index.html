@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clicker Game</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background-color: #f4f4f4;
+    }
+    button {
+      padding: 20px 40px;
+      font-size: 20px;
+      margin: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .stats {
+      font-size: 24px;
+      margin: 20px;
+    }
+    .achievements {
+      margin-top: 20px;
+    }
+    .achievement {
+      display: inline-block;
+      background-color: #FFD700;
+      padding: 5px 15px;
+      border-radius: 5px;
+      margin: 5px;
+      font-weight: bold;
+    }
+    .progress-bar {
+      width: 100%;
+      background-color: #ddd;
+      height: 30px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+    .progress-bar-filled {
+      height: 100%;
+      background-color: #4caf50;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Click as Fast as You Can!</h1>
+  <div class="stats">Clicks: <span id="clicks">0</span></div>
+  <button onclick="handleClick()">Click Me!</button>
+  <br>
+  <button onclick="buyAutoClicker()">Buy Auto-Clicker (<span id="autoClickerCost">50</span> clicks)</button>
+  <div class="stats">Auto-Clickers: <span id="autoClickers">0</span></div>
+
+  <div class="stats">
+    Clicks per Second: <span id="cps">0</span>
+  </div>
+
+  <h3>Upgrade Shop</h3>
+  <button onclick="buyClickBoost()">Upgrade Click (+1)</button>
+  <button onclick="buyAutoClickerBoost()">Upgrade Auto-Clicker</button>
+
+  <h3>Achievements</h3>
+  <div id="achievements"></div>
+
+  <div class="stats">
+    <h3>Prestige</h3>
+    <button onclick="prestige()">Prestige (Reset for Gold Clicks)</button>
+    <div id="goldClicks">Gold Clicks: 0</div>
+  </div>
+
+  <div class="progress-bar">
+    <div id="upgradeProgress" class="progress-bar-filled" style="width: 0%;"></div>
+  </div>
+
+  <script src="script.js"></script>
+
+<!-- Floating message container -->
+<div id="float-msg" style="
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff4d4d;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  display: none;
+  z-index: 1000;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  transition: opacity 0.5s ease;
+">
+  Not enough clicks!
+</div>
+</body>
+</html>
