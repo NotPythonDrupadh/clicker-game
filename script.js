@@ -38,7 +38,7 @@ function updateDisplay() {
   document.getElementById('clicks').textContent = clicks;
   document.getElementById('autoClickers').textContent = autoClickers.length;
   document.getElementById('autoClickerCost').textContent = autoClickerCost;
-  document.getElementById('cps').textContent = getClickRate();
+  document.getElementById('cps').textContent = `Clicks per second: ${getClickRate()}`;
   document.getElementById('goldClicks').textContent = 'Gold Clicks: ' + goldClicks;
   updateAchievements();
   document.getElementById('upgradeProgress').style.width = `${(upgradeProgress / upgradeGoal) * 100}%`;
@@ -73,8 +73,8 @@ function buyAutoClicker() {
     if (clicks >= autoClickerCost) {
       clicks -= autoClickerCost;
   
-      // Correct power doubling based on number bought
-      const power = Math.pow(2, autoClickers.length);
+      // Powers: 2, 4, 8, 16...
+      const power = Math.pow(2, autoClickers.length); 
       autoClickers.push(power);
   
       autoClickerCost = Math.floor(autoClickerCost * 1.5);
@@ -82,7 +82,8 @@ function buyAutoClicker() {
     } else {
       showFloatingMessage("Not enough clicks!");
     }
-  }
+}
+  
   
 
 function buyClickBoost() {
@@ -106,7 +107,7 @@ function buyAutoClickerBoost() {
 }
 
 function getClickRate() {
-  return autoClickers.reduce((sum, power) => sum + power, 0) + (autoClickerBoost * autoClickers.length);
+    return autoClickers.reduce((sum, power) => sum + power * autoClickerBoost, 0);
 }
 
 function updateAchievements() {
