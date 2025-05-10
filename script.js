@@ -11,6 +11,8 @@ let upgradeProgress = 0;
 let upgradeGoal = 100; // Goal to progress to next upgrade
 let autoClickerPower = 2; // Start at 2 clicks/sec per auto-clicker
 let soundsEnabled = true;
+let lastUpdateTime = Date.now();
+let totalClicksPerSecond = 0;
 
 // Save/load progress
 if(localStorage.getItem('clicks')) {
@@ -57,8 +59,7 @@ function showFloatingMessage(message) {
         msg.style.display = "none";
       }, 500);
     }, 2000);
-  }
-  
+}
 
 function handleClick() {
   clicks += clickBoost;
@@ -84,8 +85,6 @@ function buyAutoClicker() {
     }
 }
   
-  
-
 function buyClickBoost() {
   if (clicks >= 100) {
     clicks -= 100;
@@ -107,7 +106,7 @@ function buyAutoClickerBoost() {
 }
 
 function getClickRate() {
-    return autoClickers.reduce((sum, power) => sum + power * autoClickerBoost, 0);
+    return autoClickers.reduce((sum, power) => sum + power * autoClickerBoost, 0) + clickQueue;
 }
 
 function updateAchievements() {
@@ -153,16 +152,19 @@ setInterval(() => {
   clickQueue += getClickRate();
 }, 1000);
 
+// Update CPS every second
 setInterval(() => {
-  if (clickQueue > 0) {
-    clicks++;
-    clickQueue--;
-    updateDisplay();
-  }
-}, 30);
+  const currentTime = Date.now();
+  const timeElapsed = (currentTime - lastUpdateTime) / 1000; // Time in seconds
+  totalClicksPerSecond = clickQueue / timeElapsed;
+  lastUpdateTime = currentTime;
+
+  updateDisplay();
+  clickQueue = 0;  // Reset click queue after updating CPS
+}, 1000);
 
 updateDisplay();
 
 window.addEventListener("beforeunload", () => {
     localStorage.clear();
-}); 
+});
