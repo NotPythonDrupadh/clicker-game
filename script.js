@@ -1,15 +1,17 @@
-const clickSound = document.getElementById("clickSound");
-const bonusSound = document.getElementById("bonusSound");
-
 let clicks = 0;
 let clickPower = 1;
 
-let autoClickers = [];
+let autoClickerCount = 0;
+let autoClickerCPS = 0;
 let autoClickerCost = 50;
 let autoClickerBoost = 1;
 
 let manualClicksThisSecond = 0;
 let lastManualCPS = 0;
+
+// Sound elements
+const clickSound = document.getElementById("clickSound");
+const bonusSound = document.getElementById("bonusSound");
 
 function handleClick() {
   clicks += clickPower;
@@ -23,8 +25,8 @@ function handleClick() {
 function buyAutoClicker() {
   if (clicks >= autoClickerCost) {
     clicks -= autoClickerCost;
-    const power = Math.pow(2, autoClickers.length); // 2, 4, 8, 16...
-    autoClickers.push(power);
+    autoClickerCount++;
+    autoClickerCPS = Math.pow(2, autoClickerCount) * autoClickerBoost;
     autoClickerCost = Math.floor(autoClickerCost * 1.5);
     updateDisplay();
     bonusSound.currentTime = 0;
@@ -40,6 +42,8 @@ function upgradeClick() {
     clicks -= cost;
     clickPower++;
     updateDisplay();
+    bonusSound.currentTime = 0;
+    bonusSound.play();
   } else {
     showFloatingMessage("Not enough clicks!");
   }
@@ -50,41 +54,22 @@ function upgradeAutoClicker() {
   if (clicks >= cost) {
     clicks -= cost;
     autoClickerBoost++;
+    autoClickerCPS = Math.pow(2, autoClickerCount) * autoClickerBoost;
     updateDisplay();
+    bonusSound.currentTime = 0;
+    bonusSound.play();
   } else {
     showFloatingMessage("Not enough clicks!");
   }
 }
 
-function getClickRate() {
-  return autoClickers.reduce((sum, power) => sum + power * autoClickerBoost, 0);
-}
-
 function updateDisplay() {
   document.getElementById("click-count").textContent = `Clicks: ${clicks}`;
-  document.getElementById("autoClickerCount").textContent = autoClickers.length;
+  document.getElementById("autoClickerCount").textContent = autoClickerCount;
   document.getElementById("clickerCost").textContent = autoClickerCost;
-}
-
-function updateCPSDisplay() {
-  const autoCPS = getClickRate();
-  const manualCPS = lastManualCPS;
-  const total = autoCPS + manualCPS;
-
   document.getElementById("cpsDisplay").textContent =
-    `Auto CPS: ${autoCPS} | Manual CPS: ${manualCPS} | Total: ${total}`;
+    `Auto CPS: ${autoClickerCPS} | Manual CPS: ${lastManualCPS} | Total: ${autoClickerCPS + lastManualCPS}`;
 }
-
-setInterval(() => {
-  clicks += getClickRate();
-  updateDisplay();
-}, 1000);
-
-setInterval(() => {
-  lastManualCPS = manualClicksThisSecond;
-  manualClicksThisSecond = 0;
-  updateCPSDisplay();
-}, 1000);
 
 function showFloatingMessage(text) {
   const message = document.createElement("div");
@@ -93,3 +78,18 @@ function showFloatingMessage(text) {
   document.getElementById("floating-messages").appendChild(message);
   setTimeout(() => message.remove(), 1000);
 }
+
+// Apply auto-clicker every second
+setInterval(() => {
+  if (autoClickerCPS > 0) {
+    clicks += autoClickerCPS;
+    updateDisplay();
+  }
+}, 1000);
+
+// Track manual CPS every second
+setInterval(() => {
+  lastManualCPS = manualClicksThisSecond;
+  manualClicksThisSecond = 0;
+  updateDisplay();
+}, 1000);
