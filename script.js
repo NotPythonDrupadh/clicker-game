@@ -1,3 +1,6 @@
+const clickSound = document.getElementById("clickSound");
+const bonusSound = document.getElementById("bonusSound");
+
 let clicks = 0;
 let clickPower = 1;
 
@@ -13,6 +16,8 @@ function handleClick() {
   manualClicksThisSecond += clickPower;
   updateDisplay();
   showFloatingMessage(`+${clickPower}`);
+  clickSound.currentTime = 0;
+  clickSound.play();
 }
 
 function buyAutoClicker() {
@@ -22,6 +27,8 @@ function buyAutoClicker() {
     autoClickers.push(power);
     autoClickerCost = Math.floor(autoClickerCost * 1.5);
     updateDisplay();
+    bonusSound.currentTime = 0;
+    bonusSound.play();
   } else {
     showFloatingMessage("Not enough clicks!");
   }
