@@ -2,59 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clicker Game</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://fav.farm/🔥">
+  <link rel="icon" href="https://fav.farm/🔥" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <h1>CLICK AS FAST AS YOU CAN!</h1>
-  <div class="stats">Clicks: <span id="clicks">0</span></div>
+  <div id="click-count">Clicks: 0</div>
+
   <button onclick="handleClick()">Click Me!</button>
-  <br>
-  <button onclick="buyAutoClicker()">Buy Auto-Clicker (<span id="autoClickerCost">50</span> clicks)</button>
-  <div class="stats">Auto-Clickers: <span id="autoClickers">0</span></div>
+  <br />
+  <button onclick="buyAutoClicker()">Buy Auto-Clicker (<span id="clickerCost">50</span> clicks)</button>
 
-  <div class="stats">
-    Clicks per Second: <span id="cps">0</span>
-  </div>
+  <div>Auto-Clickers: <span id="autoClickerCount">0</span></div>
+  <div id="cpsDisplay">Auto CPS: 0 | Manual CPS: 0 | Total: 0</div>
 
-  <h3>Upgrade Shop</h3>
-  <button onclick="buyClickBoost()">Upgrade Click (+1)</button>
-  <button onclick="buyAutoClickerBoost()">Upgrade Auto-Clicker</button>
+  <h2>Upgrade Shop</h2>
+  <button onclick="upgradeClick()">Upgrade Click (+1)</button>
+  <button onclick="upgradeAutoClicker()">Upgrade Auto-Clicker</button>
 
-  <h3>Achievements</h3>
+  <h2>Achievements</h2>
   <div id="achievements"></div>
 
-  <div class="stats">
-    <h3>Prestige</h3>
-    <button onclick="prestige()">Prestige (Reset for Gold Clicks)</button>
-    <div id="goldClicks">Gold Clicks: 0</div>
-  </div>
-
-  <div class="progress-bar">
-    <div id="upgradeProgress" class="progress-bar-filled" style="width: 0%;"></div>
-  </div>
+  <div id="floating-messages"></div>
 
   <script src="script.js"></script>
-
-<!-- Floating message container -->
-<div id="float-msg" style="
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ff4d4d;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: bold;
-  display: none;
-  z-index: 1000;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  transition: opacity 0.5s ease;
-">
-  Not enough clicks!
-</div>
 </body>
 </html>
