@@ -1,35 +1,61 @@
 body {
-    background: #121212;
-    color: white;
-    font-family: 'Segoe UI', sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 40px;
+  background: #121212;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 40px;
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 15px 25px;
+  margin: 10px;
+  font-size: 1em;
+  background: #00c853;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #00b342;
+}
+
+#click-count,
+#cpsDisplay {
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+#floating-messages {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.floating-message {
+  animation: floatUp 1s ease-out forwards;
+  color: #00e676;
+  font-size: 1.2em;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
-  
-  h1 {
-    font-size: 3em;
-    margin-bottom: 10px;
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -100px);
   }
-  
-  button {
-    padding: 15px 25px;
-    margin: 10px;
-    font-size: 1em;
-    background: #00c853;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    color: white;
-    transition: background 0.2s ease;
-  }
-  
-  button:hover {
-    background: #02d359;
-  }
-  
-  #click-count, #cps {
-    font-size: 1.5em;
-    margin-top: 20px;
-  }
-  
+}
